@@ -7,16 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		90515B78B8085DC5DE26FBA1 /* Pods_CalAI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1CBC39A94C94F0F1D265635 /* Pods_CalAI.framework */; };
 		E6E570E22D8DA1F100B33714 /* store.storekit in Resources */ = {isa = PBXBuildFile; fileRef = E6E570E12D8DA1F100B33714 /* store.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		73925D30BEAB1D4DCBDBDC4B /* Pods-CalAI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CalAI.release.xcconfig"; path = "Target Support Files/Pods-CalAI/Pods-CalAI.release.xcconfig"; sourceTree = "<group>"; };
-		A6B61EDE0FD6966E5CEBD5EC /* Pods-CalAI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CalAI.debug.xcconfig"; path = "Target Support Files/Pods-CalAI/Pods-CalAI.debug.xcconfig"; sourceTree = "<group>"; };
 		E6B36EE92D82EB2C0047C27D /* CalAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CalAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6E570E12D8DA1F100B33714 /* store.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = store.storekit; sourceTree = "<group>"; };
-		F1CBC39A94C94F0F1D265635 /* Pods_CalAI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CalAI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,26 +41,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90515B78B8085DC5DE26FBA1 /* Pods_CalAI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		376866E832AC9CDC9C710737 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F1CBC39A94C94F0F1D265635 /* Pods_CalAI.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		CF65A0A918F158A45041C4F8 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A6B61EDE0FD6966E5CEBD5EC /* Pods-CalAI.debug.xcconfig */,
-				73925D30BEAB1D4DCBDBDC4B /* Pods-CalAI.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -76,7 +61,6 @@
 				E6B36EEB2D82EB2C0047C27D /* CalAI */,
 				E6B36EEA2D82EB2C0047C27D /* Products */,
 				CF65A0A918F158A45041C4F8 /* Pods */,
-				376866E832AC9CDC9C710737 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,11 +79,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E6B36EF72D82EB2E0047C27D /* Build configuration list for PBXNativeTarget "CalAI" */;
 			buildPhases = (
-				1B2F9ED48BEBBFF1835E5CDA /* [CP] Check Pods Manifest.lock */,
 				E6B36EE52D82EB2C0047C27D /* Sources */,
 				E6B36EE62D82EB2C0047C27D /* Frameworks */,
 				E6B36EE72D82EB2C0047C27D /* Resources */,
-				9FEE22BD2520A58C895028B5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -157,48 +139,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		1B2F9ED48BEBBFF1835E5CDA /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-CalAI-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9FEE22BD2520A58C895028B5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CalAI/Pods-CalAI-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CalAI/Pods-CalAI-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CalAI/Pods-CalAI-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E6B36EE52D82EB2C0047C27D /* Sources */ = {
@@ -332,7 +272,6 @@
 		};
 		E6B36EF82D82EB2E0047C27D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6B61EDE0FD6966E5CEBD5EC /* Pods-CalAI.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -355,7 +294,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.nex0zz.CalAI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mek.calaifit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -369,7 +308,6 @@
 		};
 		E6B36EF92D82EB2E0047C27D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 73925D30BEAB1D4DCBDBDC4B /* Pods-CalAI.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -392,7 +330,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.nex0zz.CalAI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mek.calaifit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
