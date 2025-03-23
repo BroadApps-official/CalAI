@@ -15,22 +15,16 @@ workflows:
         XCODE_SCHEME: "CalAI"
         APP_STORE_APPLE_ID: 6743544003
       xcode: latest
+      cache:
+        paths:
+          - ~/.cocoapods/repos  # Кешируем CocoaPods
+          - ~/Library/Developer/Xcode/DerivedData  # Кеш Xcode
+          - ~/Library/Caches/com.apple.dt.Xcode  # Кеш SPM-зависимостей
     scripts:
-      - name: Restore CocoaPods cache
-        script: |
-          if [ -d "$CM_CACHE_DIR/cocoapods" ]; then
-            echo "Restoring CocoaPods cache..."
-            mkdir -p ~/.cocoapods/repos
-            rsync -a "$CM_CACHE_DIR/cocoapods/" ~/.cocoapods/repos/
-          fi
       - name: Install CocoaPods dependencies
         script: |
           cd "$CM_BUILD_DIR"
           pod install --repo-update
-      - name: Save CocoaPods cache
-        script: |
-          mkdir -p "$CM_CACHE_DIR/cocoapods"
-          rsync -a ~/.cocoapods/repos/ "$CM_CACHE_DIR/cocoapods/"
       - name: Resolve Swift Package Manager dependencies
         script: |
           xcodebuild -resolvePackageDependencies \
