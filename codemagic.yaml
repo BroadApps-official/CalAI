@@ -20,6 +20,7 @@ workflows:
         script: |
           if [ -d "$CM_CACHE_DIR/cocoapods" ]; then
             echo "Restoring CocoaPods cache..."
+            mkdir -p ~/.cocoapods/repos
             cp -R "$CM_CACHE_DIR/cocoapods" ~/.cocoapods/repos
           fi
       - name: Install CocoaPods dependencies
@@ -29,6 +30,7 @@ workflows:
       - name: Save CocoaPods cache
         script: |
           mkdir -p "$CM_CACHE_DIR/cocoapods"
+          rm -rf "$CM_CACHE_DIR/cocoapods"
           cp -R ~/.cocoapods/repos "$CM_CACHE_DIR/cocoapods"
       - name: Resolve Swift Package Manager dependencies
         script: |
