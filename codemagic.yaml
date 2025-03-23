@@ -16,10 +16,8 @@ workflows:
         APP_STORE_APPLE_ID: 6743544003
       xcode: latest
     cache:
-      paths:
-        - ~/.cocoapods/repos  # Кешируем CocoaPods
-        - ~/Library/Developer/Xcode/DerivedData  # Кеш Xcode
-        - ~/Library/Caches/com.apple.dt.Xcode  # Кеш SPM-зависимостей
+      cocoapods: true
+      xcode: true     
     scripts:
       - name: Install CocoaPods dependencies
         script: |
