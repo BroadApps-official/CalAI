@@ -15,9 +15,6 @@ workflows:
         XCODE_SCHEME: "CalAI"
         APP_STORE_APPLE_ID: 6743544003
       xcode: latest
-    cache:
-      cocoapods: true
-      xcode: true     
     scripts:
       - name: Install CocoaPods dependencies
         script: |
