@@ -142,8 +142,8 @@ struct SubscriptionSheet: View {
                         .padding(.top, geometry.size.height * 0.01)
                         
                         HStack(spacing: geometry.size.width * 0.05) {
-                            NavigationLink(destination: UsagePolicyView()) {
-                                Text("Terms of Use")
+                            NavigationLink(destination: PrivacyPolicyView()) {
+                                Text("Privacy Policy")
                                     .foregroundColor(.gray)
                                     .font(.caption)
                             }
