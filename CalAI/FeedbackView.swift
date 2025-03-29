@@ -58,11 +58,10 @@ class AppStateManager: ObservableObject {
     }
 }
 
-// FeedbackView (без изменений)
 struct FeedbackView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var appState: AppStateManager
-    let appStoreId = "6742832930"
+    let appStoreId = "6743544003"
     
     var body: some View {
         ZStack {

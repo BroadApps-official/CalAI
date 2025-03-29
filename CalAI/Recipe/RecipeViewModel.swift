@@ -216,6 +216,7 @@ struct ResultView: View {
         .background(Color.black.edgesIgnoringSafeArea(.all))
     }
 }
+
 struct RecipeDetailView: View {
     let recipe: Recipe
     @ObservedObject var viewModel: RecipeViewModel

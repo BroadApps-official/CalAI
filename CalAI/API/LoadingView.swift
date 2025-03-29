@@ -21,11 +21,12 @@ struct LoadingView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing: 20) {
+                    LottieView(animation: .named("CalAI.json"))
+                        .playing(loopMode: .autoReverse)
+                        .frame(width: 250, height: 250)
+                        .padding()
                     if !taskViewModel.isDataLoaded {
-                        LottieView(animation: .named("CalAI.json"))
-                            .playing(loopMode: .autoReverse)
-                            .frame(width: 250, height: 250)
-                            .padding()
+                        
                         Text("A scan is underway")
                             .foregroundColor(.white)
                             .font(.headline)
@@ -62,7 +63,8 @@ struct LoadingView: View {
                             viewModel: RecipeViewModel(),
                             category: category,
                             image: taskViewModel.selectedImage
-                        ),
+                        )
+                        .onDisappear { dismiss() },
                         isActive: $shouldNavigate
                     ) {
                         EmptyView()
@@ -97,8 +99,4 @@ struct LoadingView: View {
             }
         }
     }
-}
-
-#Preview {
-    LoadingView(taskViewModel: TaskViewModel(), category: "")
 }

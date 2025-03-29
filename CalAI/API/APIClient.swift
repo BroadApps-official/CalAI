@@ -495,7 +495,7 @@ struct CustomTabBar: View {
         }
         .padding(.horizontal, 10)
         .frame(height: 70)
-        .background(Color.black.opacity(0.9))
+        .background(.black)
         .cornerRadius(24)
         .padding(.horizontal)
         .padding(.bottom, 10)
@@ -530,6 +530,7 @@ struct TabBarButton: View {
 
 import SwiftUI
 import ApphudSDK
+import Network
 
 struct AddEntryView: View {
     @Binding var isPresented: Bool
@@ -541,7 +542,13 @@ struct AddEntryView: View {
     @StateObject private var subscriptionManager = SubscriptionManager()
     @State private var showSubscriptionSheet = false
     @State private var showLoadingView = false
+    @State private var showNetworkAlert = false // Added for network alert
+    @State private var isConnected = true // Added to track connection status
     let category: String
+    
+    // Network monitoring
+    private let monitor = NWPathMonitor()
+    private let queue = DispatchQueue(label: "NetworkMonitor")
     
     var body: some View {
         ZStack {
@@ -579,10 +586,12 @@ struct AddEntryView: View {
                 HStack(spacing: 8) {
                     Button(action: {
                         impactFeedback.impactOccurred()
-                        if subscriptionManager.hasSubscription {
-                            showText = true
-                        } else {
-                            showSubscriptionSheet = true
+                        checkConnectionAndProceed {
+                            if subscriptionManager.hasSubscription {
+                                showText = true
+                            } else {
+                                showSubscriptionSheet = true
+                            }
                         }
                     }) {
                         VStack {
@@ -603,10 +612,12 @@ struct AddEntryView: View {
                     
                     Button(action: {
                         impactFeedback.impactOccurred()
-                        if subscriptionManager.hasSubscription {
-                            showImagePicker = true
-                        } else {
-                            showSubscriptionSheet = true
+                        checkConnectionAndProceed {
+                            if subscriptionManager.hasSubscription {
+                                showImagePicker = true
+                            } else {
+                                showSubscriptionSheet = true
+                            }
                         }
                     }) {
                         VStack {
@@ -627,10 +638,12 @@ struct AddEntryView: View {
                     
                     Button(action: {
                         impactFeedback.impactOccurred()
-                        if subscriptionManager.hasSubscription {
-                            showGalleryPicker = true
-                        } else {
-                            showSubscriptionSheet = true
+                        checkConnectionAndProceed {
+                            if subscriptionManager.hasSubscription {
+                                showGalleryPicker = true
+                            } else {
+                                showSubscriptionSheet = true
+                            }
                         }
                     }) {
                         VStack {
@@ -667,6 +680,16 @@ struct AddEntryView: View {
             .fullScreenCover(isPresented: $showSubscriptionSheet) {
                 SubscriptionSheet(viewModel: SubscriptionViewModel())
             }
+            .alert(isPresented: $showNetworkAlert) {
+                Alert(
+                    title: Text("No Internet Connection"),
+                    message: Text("Please check your internet connection and try again."),
+                    primaryButton: .default(Text("Retry")) {
+                        checkConnectionAndProceed {}
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
             .onChange(of: selectedImage) { _ in
                 if let image = selectedImage {
                     taskViewModel.createImageTask(image: image, destination: .resultView)
@@ -674,9 +697,39 @@ struct AddEntryView: View {
                 }
             }
             .task {
+                setupNetworkMonitoring()
                 await subscriptionManager.checkSubscriptionStatus()
             }
         }
+    }
+    
+    // Function to check connection and proceed or show alert
+    private func checkConnectionAndProceed(_ action: @escaping () -> Void) {
+        if isConnected {
+            action()
+        } else {
+            showNetworkAlert = true
+        }
+    }
+    
+    // Setup network monitoring
+    private func setupNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isConnected = path.status == .satisfied
+                if !isConnected {
+                    showNetworkAlert = true
+                }
+            }
+        }
+        monitor.start(queue: queue)
+    }
+}
+
+// Make sure to cancel monitoring when view disappears
+extension AddEntryView {
+    func onDisappear() {
+        monitor.cancel()
     }
 }
 

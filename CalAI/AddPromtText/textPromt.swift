@@ -3,7 +3,6 @@
 //  CalAI
 //
 //  Created by Денис Николаев on 17.03.2025.
-//
 
 import SwiftUI
 

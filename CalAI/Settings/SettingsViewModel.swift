@@ -20,9 +20,14 @@ class SettingsViewModel: ObservableObject {
     }
     
     func requestReview() {
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            SKStoreReviewController.requestReview(in: scene)
+        guard let windowScene = UIApplication.shared
+                .connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .first else {
+            print("Не удалось получить UIWindowScene")
+            return
         }
+        SKStoreReviewController.requestReview(in: windowScene)
     }
     
     func shareApp() {
