@@ -1,4 +1,3 @@
-//
 //  CalorieViewModel.swift
 //  CalAI
 //
@@ -49,7 +48,6 @@ class CalorieViewModel: ObservableObject {
         print("DEBUG: Initializing with userData: \(String(describing: userData))")
         updateGoals()
         
-        // Observe UserData updates
         NotificationCenter.default.addObserver(
             forName: NSNotification.Name("UserDataUpdated"),
             object: nil,
@@ -60,14 +58,11 @@ class CalorieViewModel: ObservableObject {
         }
     }
     
-    // Check if there is a record (meals or activities) for a given date
     func hasRecord(for date: Date) -> Bool {
         let normalizedDate = normalizeDate(date)
         guard let tracker = dailyTrackers[normalizedDate] else { return false }
         
-        // Check if there are any meals in any category
         let hasMeals = tracker.meals.values.contains { !$0.isEmpty }
-        // Check if there are any activities
         let hasActivities = !tracker.activities.isEmpty
         
         return hasMeals || hasActivities
@@ -87,7 +82,8 @@ class CalorieViewModel: ObservableObject {
               let weight = userData.weight,
               let height = userData.height,
               let dateOfBirth = userData.dateOfBirth,
-              let goal = userData.goal else {
+              let goal = userData.goal,
+              let activityLevel = userData.activityLevel else {
             print("DEBUG: Missing user data, using defaults")
             calorieGoal = 2000
             proteinGoal = 0
@@ -101,30 +97,40 @@ class CalorieViewModel: ObservableObject {
         let bmr: Double
         switch gender {
         case .men:
-            bmr = 10 * weight + 6.25 * height - 5 * Double(age) + 5
+            bmr = 88.362 + (13.397 * weight) + (4.975 * height) - (5.677 * Double(age))
         case .women:
-            bmr = 10 * weight + 6.25 * height - 5 * Double(age) - 161
+            bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.33 * Double(age))
         }
-        let tdee = bmr * 1.55
+        
+        let activityCoefficient: Double
+        switch activityLevel {
+        case .sedentary:
+            activityCoefficient = 1.2
+        case .light:
+            activityCoefficient = 1.3
+        case .moderate:
+            activityCoefficient = 1.4
+        case .active:
+            activityCoefficient = 1.6
+        case .veryActive:
+            activityCoefficient = 1.9
+        }
+        
+        let tdee = bmr * activityCoefficient
         
         switch goal {
         case .loseWeight:
-            calorieGoal = Int(tdee - 500)
+            calorieGoal = Int(tdee * 0.8)
         case .maintainWeight:
             calorieGoal = Int(tdee)
         case .gainWeight:
-            calorieGoal = Int(tdee + 500)
+            calorieGoal = Int(tdee * 1.2)
         }
         
-        proteinGoal = Int(weight * 2)
-        let fatCalories = Double(calorieGoal) * 0.25
-        fatsGoal = Int(fatCalories / 9)
-        let proteinCalories = Double(proteinGoal) * 4
-        let carbsCalories = Double(calorieGoal) - proteinCalories - fatCalories
-        carbsGoal = Int(carbsCalories / 4)
-        
+        proteinGoal = Int(Double(calorieGoal) * 0.30 / 4)
+        fatsGoal = Int(Double(calorieGoal) * 0.20 / 9)
+        carbsGoal = Int(Double(calorieGoal) * 0.50 / 4)
     }
-    
     func caloriesLeft() -> Int {
         guard let tracker = currentTracker else { return calorieGoal }
         return calorieGoal - tracker.totalCalories
@@ -132,7 +138,7 @@ class CalorieViewModel: ObservableObject {
     
     func totalCaloriesConsumed() -> Int {
         let consumed = currentTracker?.totalCalories ?? 0
-        return max(0, consumed) // Ensure non-negative value for UI
+        return max(0, consumed)
     }
     
     func meals(for category: String) -> [Meal] {
@@ -244,5 +250,9 @@ class CalorieViewModel: ObservableObject {
         if let loadedUserData = CalorieViewModel.loadUserData() {
             self.userData = loadedUserData
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }

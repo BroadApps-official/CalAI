@@ -18,6 +18,14 @@ enum Goal: String, CaseIterable, Codable {
     case gainWeight = "Gain weight"
 }
 
+enum ActivityLevel: String, Codable {
+    case sedentary = "Sedentary"
+    case light = "Lightly active"
+    case moderate = "Moderately active"
+    case active = "Very active"
+    case veryActive = "Extra active"
+}
+
 struct UserData: Codable {
     var gender: Gender?
     var dateOfBirth: Date?
@@ -25,4 +33,5 @@ struct UserData: Codable {
     var height: Double?
     var goal: Goal?
     var targetWeight: Double?
+    var activityLevel: ActivityLevel?
 }

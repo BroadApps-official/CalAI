@@ -12,17 +12,18 @@ struct MacroView: View {
     let value: Int
     let goal: Int
     let label: String
+    let color: String
     
     var body: some View {
         VStack(spacing: 8) {
             ZStack {
                 Circle()
-                    .stroke(Color.green.opacity(0.3), lineWidth: 6)
+                    .stroke(Color(hex: color).opacity(0.3), lineWidth: 6)
                     .frame(width: 70, height: 70)
                 
                 Circle()
                     .trim(from: 0.0, to: min(CGFloat(value) / CGFloat(goal), 1.0))
-                    .stroke(Color.green, lineWidth: 6)
+                    .stroke(Color(hex: color), lineWidth: 6)
                     .rotationEffect(Angle(degrees: -90))
                     .frame(width: 70, height: 70)
                 

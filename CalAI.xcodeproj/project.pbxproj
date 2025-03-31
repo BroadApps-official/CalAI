@@ -283,7 +283,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CalAI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Calor Counter";
+				INFOPLIST_KEY_CFBundleDisplayName = "My plate";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Access to the camera is required to add a photo to the request";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you, improve the app, and track subscriptions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -321,7 +321,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CalAI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Calor Counter";
+				INFOPLIST_KEY_CFBundleDisplayName = "My plate";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Access to the camera is required to add a photo to the request";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you, improve the app, and track subscriptions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

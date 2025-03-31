@@ -21,7 +21,8 @@ class UserDataViewModel: ObservableObject {
         "Choose your weight",
         "Choose your height",
         "Select a goal",
-        "Select the target weight"
+        "Select the target weight",
+        "Select your activity"
     ]
     
     var isCurrentStepValid: Bool {
@@ -32,6 +33,7 @@ class UserDataViewModel: ObservableObject {
         case 3: return userData.height != nil
         case 4: return userData.goal != nil
         case 5: return userData.targetWeight != nil
+        case 6: return userData.activityLevel != nil
         default: return false
         }
     }

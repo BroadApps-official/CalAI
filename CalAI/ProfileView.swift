@@ -40,6 +40,9 @@ struct ProfileView: View {
                     NavigationLink(destination: TargetWeightView(viewModel: viewModel, choose: true).navigationBarBackButtonHidden(true)) {
                         ProfileRow(title: "Target weight", value: formattedValue(viewModel.userData.targetWeight, unit: "kg"))
                     }
+                    NavigationLink(destination: ActivityLevelView(viewModel: viewModel, choose: true).navigationBarBackButtonHidden(true)) {
+                        ProfileRow(title: "Activity", value: viewModel.userData.activityLevel?.rawValue ?? "Not set")
+                    }
                 }
                 .padding(.horizontal, 16)
 

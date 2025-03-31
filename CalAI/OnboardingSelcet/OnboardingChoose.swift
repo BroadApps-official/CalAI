@@ -36,6 +36,7 @@ struct OnboardingChoose: View {
                     case 3: HeightView(viewModel: viewModel, choose: false)
                     case 4: GoalView(viewModel: viewModel, choose: false)
                     case 5: TargetWeightView(viewModel: viewModel, choose: false)
+                    case 6: ActivityLevelView(viewModel: viewModel, choose: false)
                     default: EmptyView()
                     }
                     

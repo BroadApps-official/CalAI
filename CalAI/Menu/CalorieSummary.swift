@@ -44,9 +44,9 @@ struct CalorieSummary: View {
             .cornerRadius(28)
             
             HStack(spacing: 40) {
-                MacroView(icon: "protein", value: viewModel.totalProtein, goal: viewModel.proteinGoal, label: "protein")
-                MacroView(icon: "carbs", value: viewModel.totalCarbs, goal: viewModel.carbsGoal, label: "carbs")
-                MacroView(icon: "fats", value: viewModel.totalFats, goal: viewModel.fatsGoal, label: "fats")
+                MacroView(icon: "protein", value: viewModel.totalProtein, goal: viewModel.proteinGoal, label: "protein", color: "#E9DF25")
+                MacroView(icon: "carbs", value: viewModel.totalCarbs, goal: viewModel.carbsGoal, label: "carbs", color: "#ED7419")
+                MacroView(icon: "fats", value: viewModel.totalFats, goal: viewModel.fatsGoal, label: "fats", color: "#25E9AE")
             }
             .padding()
             .background(Color(hex: "#000000").opacity(0.4))
