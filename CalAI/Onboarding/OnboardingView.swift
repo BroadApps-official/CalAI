@@ -3,7 +3,7 @@
 //  CalAI
 //
 //  Created by Денис Николаев on 13.03.2025.
-//
+
 
 import SwiftUI
 
@@ -33,3 +33,6 @@ struct OnboardingView: View {
 #Preview {
     OnboardingView()
 }
+
+
+

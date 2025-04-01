@@ -64,8 +64,8 @@ struct LoadingView: View {
                             category: category,
                             image: taskViewModel.selectedImage
                         )
-                        .onDisappear { dismiss() },
-                        isActive: $shouldNavigate
+                       // .onDisappear { dismiss() },
+                        ,isActive: $shouldNavigate
                     ) {
                         EmptyView()
                     }
