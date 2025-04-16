@@ -5,23 +5,6 @@
 //  Created by Денис Николаев on 14.03.2025.
 //
 
-
-struct NutritionIcon: View {
-    let value: Int
-    let icon: String
-    
-    var body: some View {
-        HStack(spacing: 4) {
-            Image(systemName: icon)
-                .foregroundColor(.gray)
-                .font(.caption)
-            Text("\(value)")
-                .font(.caption)
-                .foregroundColor(.gray)
-        }
-    }
-}
-
 import SwiftUI
 
 struct ResultView: View {
@@ -31,41 +14,44 @@ struct ResultView: View {
     let image: UIImage?
     @State private var navigateToRecipeDetail = false
     @State private var savedRecipe: Recipe?
+    @State private var showSheet = false // State to control sheet presentation
     @Environment(\.dismiss) var dismiss
     
+    // Track visit count using UserDefaults
+    private let visitCountKey = "ResultViewVisitCount"
+    
     var body: some View {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    if let task = task, let comment = task.comment {
-                        Text("Description")
-                            .font(.headline)
-                            .padding(.horizontal)
-                        Text(comment)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                            .padding(.horizontal)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                if let task = task, let comment = task.comment {
+                    Text("Description")
+                        .font(.headline)
+                        .padding(.horizontal)
+                    Text(comment)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .padding(.horizontal)
+                }
+                
+                HStack {
+                    Spacer()
+                    if let totalCalories = task?.totalKilocalories {
+                        Text("+ \(Int(totalCalories.rounded()))")
+                            .foregroundColor(.green)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                        + Text(" kcal")
+                            .foregroundColor(.white)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
                     }
-                    
-                   
-                    HStack{
-                        Spacer()
-                        if let totalCalories = task?.totalKilocalories {
-                            Text("+ \(Int(totalCalories.rounded()))")
-                                .foregroundColor(.green)
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                            + Text(" kcal")
-                                .foregroundColor(.white)
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                        }
-                        Spacer()
-                    }
-                    
-                    if let items = task?.items {
-                        ForEach(items, id: \.id) { item in
-                            NavigationLink(destination: ItemDetailView(item: item, comment: task?.comment, image: image).navigationBarBackButtonHidden(true)) {
-                                VStack {
+                    Spacer()
+                }
+                
+                if let items = task?.items {
+                    ForEach(items, id: \.id) { item in
+                        NavigationLink(destination: ItemDetailView(item: item, comment: task?.comment, image: image).navigationBarBackButtonHidden(true)) {
+                            VStack {
                                 if let items = task?.items, let firstItem = items.first {
                                     let totalProteins = (firstItem.weight ?? 0.0) / 100.0 * (firstItem.proteinsPer100g ?? 0.0)
                                     let totalCarbs = (firstItem.weight ?? 0.0) / 100.0 * (firstItem.carbohydratesPer100g ?? 0.0)
@@ -78,75 +64,83 @@ struct ResultView: View {
                                     }
                                     .padding(.horizontal)
                                 }
-                                    ItemRow(item: item, image: image)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                                
+                                ItemRow(item: item, image: image)
                             }
+                            .buttonStyle(PlainButtonStyle())
                         }
+                    }
+                    .padding()
+                    .background(Color(hex: "#FFFFFF").opacity(0.1))
+                    .cornerRadius(32)
+                } else {
+                    Text("No items to display")
+                        .foregroundColor(.gray)
                         .padding()
-                        .background(Color(hex: "#FFFFFF").opacity(0.1))
-                        .cornerRadius(32)
-                        
-                    } else {
-                        Text("No items to display")
-                            .foregroundColor(.gray)
-                            .padding()
-                    }
-                    
-                    Button(action: {
-                        impactFeedback.impactOccurred()
-                        saveRecipe()
-                        if let task = task {
-                            let name = task.items?.first?.product ?? "Untitled"
-                            let calories = Int(task.totalKilocalories?.rounded() ?? 0)
-                            let items = task.items ?? []
-                            let totalProteins = items.reduce(0) { $0 + (($1.weight ?? 0) / 100.0 * ($1.proteinsPer100g ?? 0)) }
-                            let totalCarbs = items.reduce(0) { $0 + (($1.weight ?? 0) / 100.0 * ($1.carbohydratesPer100g ?? 0)) }
-                            let totalFats = items.reduce(0) { $0 + (($1.weight ?? 0) / 100.0 * ($1.fatsPer100g ?? 0)) }
-                            let description = task.comment ?? "No description"
-                            let ingredients = items.flatMap { item -> [String] in
-                                if let itemIngredients = item.ingredients, !itemIngredients.isEmpty {
-                                    return itemIngredients.map { ingredient in
-                                        let name = ingredient.ingredient
-                                        let weight = ingredient.weight
-                                        return "\(name) (\(weight) g)"
-                                    }
-                                } else if let product = item.product {
-                                    return [product]
-                                }
-                                return ["Unknown ingredient"]}
-                            let imageName = image != nil ? saveImageToDisk(image: image!) : nil
-                            
-                            savedRecipe = Recipe(
-                                name: name,
-                                category: category,
-                                calories: calories,
-                                protein: Int(totalProteins.rounded()),
-                                carbs: Int(totalCarbs.rounded()),
-                                fats: Int(totalFats.rounded()),
-                                description: description,
-                                ingredients: ingredients,
-                                imageName: imageName
-                            )
-                        }
-                        dismiss()
-                    }) {
-                        Text("\(Image(systemName: "checkmark")) Save")
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color(hex: "#0FB423"))
-                            .cornerRadius(32)
-                            .padding(.horizontal)
-                    }
-                    
                 }
-                .navigationTitle(category)
-                .background(Color.black.edgesIgnoringSafeArea(.all))
+                
+                Button(action: {
+                    impactFeedback.impactOccurred()
+                    saveRecipe()
+                    if let task = task {
+                        let name = task.items?.first?.product ?? "Untitled"
+                        let calories = Int(task.totalKilocalories?.rounded() ?? 0)
+                        let items = task.items ?? []
+                        let totalProteins = items.reduce(0) { $0 + (($1.weight ?? 0) / 100.0 * ($1.proteinsPer100g ?? 0)) }
+                        let totalCarbs = items.reduce(0) { $0 + (($1.weight ?? 0) / 100.0 * ($1.carbohydratesPer100g ?? 0)) }
+                        let totalFats = items.reduce(0) { $0 + (($1.weight ?? 0) / 100.0 * ($1.fatsPer100g ?? 0)) }
+                        let description = task.comment ?? "No description"
+                        let ingredients = items.flatMap { item -> [String] in
+                            if let itemIngredients = item.ingredients, !itemIngredients.isEmpty {
+                                return itemIngredients.map { ingredient in
+                                    let name = ingredient.ingredient
+                                    let weight = ingredient.weight
+                                    return "\(name) (\(weight) g)"
+                                }
+                            } else if let product = item.product {
+                                return [product]
+                            }
+                            return ["Unknown ingredient"]
+                        }
+                        let imageName = image != nil ? saveImageToDisk(image: image!) : nil
+                        
+                        savedRecipe = Recipe(
+                            name: name,
+                            category: category,
+                            calories: calories,
+                            protein: Int(totalProteins.rounded()),
+                            carbs: Int(totalCarbs.rounded()),
+                            fats: Int(totalFats.rounded()),
+                            description: description,
+                            ingredients: ingredients,
+                            imageName: imageName
+                        )
+                    }
+                    dismiss()
+                }) {
+                    Text("\(Image(systemName: "checkmark")) Save")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(hex: "#0FB423"))
+                        .cornerRadius(32)
+                        .padding(.horizontal)
+                }
+            }
+            .navigationTitle(category)
+            .background(Color.black.edgesIgnoringSafeArea(.all))
+            .onAppear {
+                let visitCount = UserDefaults.standard.integer(forKey: visitCountKey) + 1
+                UserDefaults.standard.set(visitCount, forKey: visitCountKey)
+                
+                if visitCount == 1 || visitCount == 6 {
+                    showSheet = true
+                }
+            }
+            .sheet(isPresented: $showSheet) {
+                FeedbackView()
             }
         }
-    
+    }
     
     private func saveRecipe() {
         guard let task = task else { return }
@@ -169,7 +163,8 @@ struct ResultView: View {
             } else if let product = item.product {
                 return [product]
             }
-            return ["Unknown ingredient"]}
+            return ["Unknown ingredient"]
+        }
         
         var imageName: String? = nil
         if let image = image {
@@ -557,6 +552,22 @@ struct EditRecipeView: View {
         
         if let index = viewModel.recipes.firstIndex(where: { $0.id == recipe.id }) {
             viewModel.recipes[index] = updatedRecipe
+        }
+    }
+}
+
+struct NutritionIcon: View {
+    let value: Int
+    let icon: String
+    
+    var body: some View {
+        HStack(spacing: 4) {
+            Image(systemName: icon)
+                .foregroundColor(.gray)
+                .font(.caption)
+            Text("\(value)")
+                .font(.caption)
+                .foregroundColor(.gray)
         }
     }
 }

@@ -110,7 +110,7 @@ struct ContentView3: View {
                 }
             )
             .fullScreenCover(isPresented: $isSubscriptionSheetPresented) {
-                SubscriptionSheet(viewModel: SubscriptionViewModel())
+                SubscriptionSheet(viewModel: SubscriptionViewModel(), showCloseButton: true)
             }
             .onAppear {
                 viewModel.reloadData()

@@ -55,5 +55,5 @@ struct ActivitySection: View {
 }
 
 #Preview {
-    HomeView()
+   // HomeView()
 }

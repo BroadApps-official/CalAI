@@ -448,6 +448,7 @@ struct HomeView: View {
     @State private var selectedTab: String = "Home"
     @StateObject private var calorieViewModel = CalorieViewModel()
     @StateObject private var recipeViewModel = RecipeViewModel()
+    @Binding var showSubscriptionSheet: Bool
     
     var body: some View {
         ZStack {
@@ -468,6 +469,9 @@ struct HomeView: View {
         }
         .environmentObject(calorieViewModel)
         .environmentObject(recipeViewModel)
+        .fullScreenCover(isPresented: $showSubscriptionSheet) {
+            SubscriptionSheet(viewModel: SubscriptionViewModel(), showCloseButton: false)
+                }
     }
 }
 
@@ -678,7 +682,7 @@ struct AddEntryView: View {
                 LoadingView(taskViewModel: taskViewModel, category: category)
             }
             .fullScreenCover(isPresented: $showSubscriptionSheet) {
-                SubscriptionSheet(viewModel: SubscriptionViewModel())
+                SubscriptionSheet(viewModel: SubscriptionViewModel(), showCloseButton: true)
             }
             .alert(isPresented: $showNetworkAlert) {
                 Alert(

@@ -12,7 +12,8 @@ struct SubscriptionSheet: View {
     @ObservedObject var viewModel: SubscriptionViewModel
     @Environment(\.dismiss) var dismiss
     @State private var subscriptionPlans: [SubscriptionPlan] = []
-    @State private var showCloseButton = false
+    let showCloseButton: Bool 
+    @State private var isCloseButtonVisible: Bool = false
     
     var body: some View {
         NavigationView {
@@ -32,30 +33,30 @@ struct SubscriptionSheet: View {
                             )
                             .frame(height: geometry.size.height * 0.15)
                             
-                            VStack{
-                                
+                            VStack {
                                 VStack {
                                     Text("Unreal heights with PRO")
                                         .font(.system(size: min(28, geometry.size.width * 0.07)))
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
                                         .multilineTextAlignment(.center)
-                                    
-                                }.padding(.bottom, 22)
-                                    
-                                    VStack(alignment: .leading, spacing: geometry.size.height * 0.015) {
-                                        ForEach(["Unlimed Access", "New features", "Access to all function"], id: \.self) { text in
-                                            HStack {
-                                                Image(systemName: "sparkles")
-                                                    .foregroundColor(.white)
-                                                Text(text)
-                                                    .foregroundColor(.white)
-                                                    .font(.system(size: min(16, geometry.size.width * 0.04)))
-                                            }
+                                }
+                                .padding(.bottom, 22)
+                                
+                                VStack(alignment: .leading, spacing: geometry.size.height * 0.015) {
+                                    ForEach(["Unlimed Access", "New features", "Access to all function"], id: \.self) { text in
+                                        HStack {
+                                            Image(systemName: "sparkles")
+                                                .foregroundColor(.white)
+                                            Text(text)
+                                                .foregroundColor(.white)
+                                                .font(.system(size: min(16, geometry.size.width * 0.04)))
                                         }
                                     }
                                 }
-                        }.padding(.bottom, 34)
+                            }
+                        }
+                        .padding(.bottom, 34)
                         
                         VStack(spacing: geometry.size.height * 0.02) {
                             ForEach($subscriptionPlans) { $plan in
@@ -71,20 +72,17 @@ struct SubscriptionSheet: View {
                                             Text(plan.period)
                                                 .foregroundColor(.white)
                                                 .font(.system(size: min(17, geometry.size.width * 0.04)))
-                                           
-                                                Text(plan.price)
-                                                    .foregroundColor(.gray)
-                                                    .font(.system(size: min(12, geometry.size.width * 0.035)))
-                                            +
-                                                Text(" per week")
-                                                    .foregroundColor(.gray)
-                                                    .font(.system(size: min(12, geometry.size.width * 0.035)))
-                                            
+                                            Text(plan.price)
+                                                .foregroundColor(.gray)
+                                                .font(.system(size: min(12, geometry.size.width * 0.035)))
+                                            + Text(" per week")
+                                                .foregroundColor(.gray)
+                                                .font(.system(size: min(12, geometry.size.width * 0.035)))
                                         }
                                         .padding(.leading, 28)
                                         Spacer()
                                         VStack(alignment: .trailing, spacing: 5) {
-                                            VStack(alignment: .center, spacing: 5){
+                                            VStack(alignment: .center, spacing: 5) {
                                                 Text(plan.price)
                                                     .foregroundColor(.white)
                                                     .font(.system(size: min(17, geometry.size.width * 0.035)))
@@ -174,7 +172,7 @@ struct SubscriptionSheet: View {
             .background(Color.black)
             .foregroundColor(.white)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(trailing: showCloseButton ? Button(action: {
+            .navigationBarItems(trailing: isCloseButtonVisible && showCloseButton ? Button(action: {
                 closePaywall()
             }) {
                 Image(systemName: "xmark")
@@ -182,10 +180,14 @@ struct SubscriptionSheet: View {
             } : nil)
             .edgesIgnoringSafeArea(.all)
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    withAnimation { showCloseButton = true }
-                }
                 load()
+                if showCloseButton {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        withAnimation {
+                            isCloseButtonVisible = true
+                        }
+                    }
+                }
             }
         }
         .background(Color.black)
@@ -281,11 +283,3 @@ struct SubscriptionSheet: View {
         }
     }
 }
-
-
-#Preview {
-    SubscriptionSheet(viewModel: SubscriptionViewModel())
-}
-
-
-

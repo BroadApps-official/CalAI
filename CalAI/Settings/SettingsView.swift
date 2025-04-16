@@ -227,7 +227,7 @@ struct SettingsView: View {
                 }
             }
             .fullScreenCover(isPresented: $isSubscriptionSheetPresented) {
-                SubscriptionSheet(viewModel: SubscriptionViewModel())
+                SubscriptionSheet(viewModel: SubscriptionViewModel(), showCloseButton: true)
             }
         }
         .task {

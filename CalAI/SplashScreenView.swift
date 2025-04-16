@@ -13,7 +13,8 @@ struct SplashScreenView: View {
     @State private var navigateToOnboarding = false
     @State private var navigateToMain = false
     @StateObject private var calorieViewModel = CalorieViewModel()
-    
+    @State private var showSubscriptionSheet = false
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -46,7 +47,7 @@ struct SplashScreenView: View {
                 startLoading()
             }
             .fullScreenCover(isPresented: $navigateToMain) {
-                HomeView()
+                HomeView(showSubscriptionSheet: $showSubscriptionSheet)
             }
         }
     }

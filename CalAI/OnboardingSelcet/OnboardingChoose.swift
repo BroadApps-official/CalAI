@@ -10,6 +10,7 @@ import SwiftUI
 struct OnboardingChoose: View {
     @StateObject private var viewModel = UserDataViewModel()
     @State private var isOnboardingComplete = false
+    @State private var showSubscriptionSheet = true
     
     var body: some View {
         NavigationView {
@@ -90,7 +91,7 @@ struct OnboardingChoose: View {
             }
             .navigationBarHidden(true)
             .fullScreenCover(isPresented: $isOnboardingComplete) {
-                HomeView()
+                HomeView(showSubscriptionSheet: $showSubscriptionSheet)
             }
         }
     }
